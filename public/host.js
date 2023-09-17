@@ -194,7 +194,7 @@ sessionSocket.on('word', (data) => {
   }
 
   // if (linkIndex === -1) {
-  console.log('new link');
+  // console.log('new link');
   graph.links.push({ source: word1, target: word2, value: data.strength, offset: offset});
   // } else {
   //   console.log('existing link');
