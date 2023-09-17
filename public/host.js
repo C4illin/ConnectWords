@@ -53,9 +53,10 @@ var width = window.innerWidth,
 //   .size([width, height]);
 
 const simulation = cola.d3adaptor(d3)
+  .size([width, height])
   .nodes(graph.nodes)
   .links(graph.links)
-  .size([width, height])
+  .avoidOverlaps(true)
   .linkDistance(140)
   .start(200, 200, 200);
 
@@ -67,9 +68,11 @@ const simulation = cola.d3adaptor(d3)
   // // .force("y", d3.forceY(height / 2))
   // .on("tick", ticked);
 
-var svg = d3.select("#wrapper").append("svg")
+var outer = d3.select("#wrapper").append("svg")
   .attr("width", width)
   .attr("height", height);
+
+var svg = outer.append("g")
 
 // .append("g")
 // var pageBounds = { x: Number(window.innerWidth*0.3), y: 10, width: Number(width), height: Number(height) }
@@ -95,7 +98,8 @@ const node = svg.selectAll("rect")
   .attr("width", function (d) { return d.width; })
   .attr("height", function (d) { return d.height; })
   .attr("rx", 5).attr("ry", 5)
-  .style("fill", function (d) { return d.color; });
+  .style("fill", function (d) { return d.color; })
+  .attr("class", "node");
 
 var label = svg.selectAll("text")
   .data(graph.nodes)
@@ -104,31 +108,52 @@ var label = svg.selectAll("text")
   .style("fill", function (d) { return d.fontColor; })
   .attr("class", "label");
 
-
 simulation.on("tick", function () {
   node.transition().duration(1000)
     .attr('x', function (d) { return d.x - d.width / 2; })
-    .attr('y', function (d) { return d.y - d.height / 2; })
+    .attr('y', function (d) { return d.y - d.height / 2; });
   
   svg.selectAll("line")
     .data(graph.links)
     .join('line')
     .attr('stroke-width', function (d) { return d.value * 2; })
     .attr('stroke', '#999')
+    .attr("class", "link")
     .lower().transition().duration(1000)
-    .attr('x1', function (d) { return d.source.x; })
-    .attr('y1', function (d) { return d.source.y; })
-    .attr('x2', function (d) { return d.target.x; })
-    .attr('y2', function (d) { return d.target.y; })
+    .attr('x1', function (d) { return d.source.x + d.offset * 5; })
+    .attr('y1', function (d) { return d.source.y + d.offset * 5; })
+    .attr('x2', function (d) { return d.target.x + d.offset * 5; })
+    .attr('y2', function (d) { return d.target.y + d.offset * 5; })
   
   label.transition().duration(1000)
     .attr('x', function (d) { return d.x; })
     .attr('y', function (d) { return d.y + d.height / 4; })
 });
 
-var addTestConnection = () => {
-  // between two random nodes
-  graph.links.push({ source: Math.floor(Math.random() * graph.nodes.length), target: Math.floor(Math.random() * graph.nodes.length), value: 1 });
+var addTestConnection = (word1 = Math.floor(Math.random() * graph.nodes.length), word2 = Math.floor(Math.random() * graph.nodes.length)) => {
+  var data = {
+    word1: graph.nodes[word1].name,
+    word2: graph.nodes[word2].name,
+  };
+
+  var offset = 0;
+  var linkIndex = -1;
+  for (var i = graph.links.length - 1; i >= 0; i--) {
+    var link = graph.links[i];
+    if ((link.source.name == data.word1 && link.target.name == data.word2) || (link.source.name == data.word2 && link.target.name == data.word1)) {
+      linkIndex = i;
+
+      if (link.offset > 0) {
+        offset = link.offset * -1;
+      } else {
+        offset = link.offset * -1 + 1;
+      }
+
+      break;
+    }
+  }
+
+  graph.links.push({ source: word1, target: word2, value: 1, offset: offset });
   simulation.links(graph.links);
   simulation.start(200, 200, 200);
 }
@@ -151,22 +176,30 @@ sessionSocket.on('word', (data) => {
     return;
   }
 
-  var linkIndex = -1;
-  for (var i = 0; i < graph.links.length; i++) {
+  var offset = 0;
+  // var linkIndex = -1;
+  for (var i = graph.links.length - 1; i >= 0; i--) {
     var link = graph.links[i];
     if ((link.source.name == data.word1 && link.target.name == data.word2) || (link.source.name == data.word2 && link.target.name == data.word1)) {
-      linkIndex = i;
+      // linkIndex = i;
+
+      if (link.offset > 0) {
+        offset = link.offset * -1;
+      } else {
+        offset = link.offset * -1 + 1;
+      }
+
       break;
     }
   }
 
-  if (linkIndex === -1) {
-    console.log('new link');
-    graph.links.push({ source: word1, target: word2, value: data.strength });
-  } else {
-    console.log('existing link');
-    graph.links[linkIndex].value += data.strength;
-  }
+  // if (linkIndex === -1) {
+  console.log('new link');
+  graph.links.push({ source: word1, target: word2, value: data.strength, offset: offset});
+  // } else {
+  //   console.log('existing link');
+  //   graph.links[linkIndex].value += data.strength;
+  // }
 
   simulation.links(graph.links);
   simulation.start(200, 200, 200);
