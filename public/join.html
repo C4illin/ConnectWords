@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Connections</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+</head>
+
+<body>
+  <div class="container">
+    <h1>Add Connections</h1>
+    <div class="word-form">
+      <form>
+        <label for="word1">Word 1:</label>
+        <select id="word1" name="word1" required>
+          <option value="ÆØK">ÆØK</option>
+          <option value="AØK">AØK</option>
+          <option value="bØf">bØf</option>
+          <option value="DNollK">DNollK</option>
+          <option value="EØK">EØK</option>
+          <option value="FnollK">FnollK</option>
+          <option value="GØS">GØS</option>
+          <option value="HØK">HØK</option>
+          <option value="INollK">INollK</option>
+          <option value="KØK">KØK</option>
+          <option value="MK">MK</option>
+          <option value="MnollK">MnollK</option>
+          <option value="NollKIT">NollKIT</option>
+          <option value="SJØK">SJØK</option>
+          <option value="TBK">TBK</option>
+          <option value="TDnollK">TDnollK</option>
+          <option value="VØK">VØK</option>
+          <option value="ZØK">ZØK</option>
+        </select>
+        <label for="word2">Word 2:</label>
+        <select list="nollk" id="word2" name="word2" required>
+          <option value="ÆØK">ÆØK</option>
+          <option value="AØK">AØK</option>
+          <option value="bØf">bØf</option>
+          <option value="DNollK">DNollK</option>
+          <option value="EØK">EØK</option>
+          <option value="FnollK">FnollK</option>
+          <option value="GØS">GØS</option>
+          <option value="HØK">HØK</option>
+          <option value="INollK">INollK</option>
+          <option value="KØK">KØK</option>
+          <option value="MK">MK</option>
+          <option value="MnollK">MnollK</option>
+          <option value="NollKIT">NollKIT</option>
+          <option value="SJØK">SJØK</option>
+          <option value="TBK">TBK</option>
+          <option value="TDnollK">TDnollK</option>
+          <option value="VØK">VØK</option>
+          <option value="ZØK">ZØK</option>
+        </select>
+
+
+        <label for="strength">Strength:</label>
+        <select id="strength" name="strength">
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+        </select>
+        <button type="submit" class="button">Add Connection</button>
+      </form>
+    </div>
+  </div>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io('/join');
+    const sessionId = window.location.pathname.split('/').pop();
+    const form = document.querySelector('.word-form form');
+    const word1Input = document.getElementById('word1');
+    const word2Input = document.getElementById('word2');
+    const strengthInput = document.getElementById('strength');
+
+    socket.emit('sessionId', sessionId);
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const word1 = word1Input.value.trim();
+      const word2 = word2Input.value.trim();
+      const strength = parseInt(strengthInput.value);
+      if (word1 && word2 && strength) {
+        socket.emit('word', { sessionId, word1, word2, strength });
+        word1Input.value = '';
+        word2Input.value = '';
+        strengthInput.value = '1';
+      }
+    });
+  </script>
+</body>
+
+</html>

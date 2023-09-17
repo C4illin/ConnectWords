@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.13.0/d3.min.js"
+    integrity="sha512-RJJ1NNC88QhN7dwpCY8rm/6OxI+YdQP48DrLGe/eSAd+n+s1PXwQkkpzzAgoJe4cZFW2GALQoxox61gSY2yQfg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="http://marvl.infotech.monash.edu/webcola/cola.min.js"></script>
+  <style>
+    .node {
+      stroke: #fff;
+      stroke-width: 1.5px;
+      cursor: move;
+    }
+
+    .link {
+      stroke: #999;
+      stroke-width: 3px;
+      stroke-opacity: 1;
+    }
+
+    .label {
+      fill: white;
+      font-family: Verdana;
+      font-size: 25px;
+      text-anchor: middle;
+      cursor: move;
+    }
+  </style>
+
+  <!-- <script>
+    var width = 500,
+      height = 500;
+    // var color = d3.scaleOrdinal(d3.schemeCategory10);
+    var cola = cola.d3adaptor(d3)
+      .linkDistance(100)
+      .avoidOverlaps(true)
+      .size([500, 500]);
+      
+    var svg = d3.select("svg");
+
+    var data = {
+      "nodes":[
+        {"name":"Test"},
+        {"name":"Test2"},
+        {"name":"Test3"}
+      ],
+      "links": [
+        {"source":0,"target":1, "value": 1},
+        {"source":1,"target":2, "value": 2},
+        {"source":2,"target":0, "value": 3}
+      ]
+    }
+
+    cola
+      .nodes(data.nodes)
+      .links(data.links)
+      .start(10, 10, 10);
+
+    // var link = svg.selectAll(".link")
+    //   .data(data.links)
+    //   .enter().append("line")
+    //   .attr("class", "link");
+
+    // var node = svg.selectAll(".node")
+    //   .data(data.nodes)
+    //   .enter().append("circle")
+    //   .attr("class", "node")
+    //   .attr("r", 10)
+    //   .style("fill", function (d) {
+    //     return color(d.group);
+    //   })
+    //   .call(cola.drag);
+  </script> -->
+</head>
+
+<body>
+  <script>
+    var width = 960,
+      height = 500;
+
+    var color = d3.scaleOrdinal(d3.schemeCategory20);
+
+    var cola = cola.d3adaptor(d3)
+      .linkDistance(120)
+      .avoidOverlaps(true)
+      .size([width, height]);
+
+    var svg = d3.select("body").append("svg")
+      .attr("width", width)
+      .attr("height", height);
+
+    var graph = {
+      nodes: [
+        { "name": "NollKIT", "width": 60, "height": 40, "color": "#09cdda" },
+        { "name": "MK", "width": 60, "height": 40, "color": "#034069" },
+        { "name": "AØK", "width": 60, "height": 40, "color": "#cc0000" },
+        { "name": "EØK", "width": 60, "height": 40, "color": "#ffff00" },
+        { "name": "FnollK", "width": 60, "height": 40, "color": "#000000" },
+        { "name": "HØK", "width": 60, "height": 40, "color": "#eb79ab" },
+        { "name": "MØK", "width": 60, "height": 40, "color": "#795548" },
+        { "name": "VØK", "width": 60, "height": 40, "color": "#3d85c6" },
+        { "name": "DNollK", "width": 60, "height": 40, "color": "#FA9907" },
+        { "name": "bØf", "width": 60, "height": 40, "color": "#3D7620" },
+        { "name": "ZØK", "width": 60, "height": 40, "color": "#6E6E6E" },
+        { "name": "GØS", "width": 60, "height": 40, "color": "#efc26a" },
+        { "name": "KØK", "width": 60, "height": 40, "color": "#5c9143" },
+        { "name": "TBK", "width": 60, "height": 40, "color": "#ffffff" },
+        { "name": "TDnollK", "width": 60, "height": 40, "color": "#8FIC43" },
+        { "name": "SJØK", "width": 60, "height": 40, "color": "#1F2163" },
+        { "name": "INollK", "width": 60, "height": 40, "color": "#9F36A1" },
+        { "name": "ÆØK", "width": 60, "height": 40, "color": "#54ce59" }
+      ],
+      links: [
+        { "source": "NollKIT", "target": "MK" }
+      ]
+    }
+
+    cola
+      .nodes(graph.nodes)
+      .links(graph.links)
+      .start();
+
+    var link = svg.selectAll(".link")
+      .data(graph.links)
+      .enter().append("line")
+      .attr("class", "link");
+
+    var node = svg.selectAll(".node")
+      .data(graph.nodes)
+      .enter().append("rect")
+      .attr("class", "node")
+      .attr("width", function (d) { return d.width; })
+      .attr("height", function (d) { return d.height; })
+      .attr("rx", 5).attr("ry", 5)
+      .style("fill", function (d) { return d.color; })
+      .call(cola.drag);
+
+    var label = svg.selectAll(".label")
+      .data(graph.nodes)
+      .enter().append("text")
+      .attr("class", "label")
+      .text(function (d) { return d.name; })
+      .call(cola.drag);
+
+    node.append("title")
+      .text(function (d) { return d.name; });
+
+    cola.on("tick", function () {
+      link.attr("x1", function (d) { return d.source.x; })
+        .attr("y1", function (d) { return d.source.y; })
+        .attr("x2", function (d) { return d.target.x; })
+        .attr("y2", function (d) { return d.target.y; });
+
+      node.attr("x", function (d) { return d.x - d.width / 2; })
+        .attr("y", function (d) { return d.y - d.height / 2; });
+
+      label.attr("x", function (d) { return d.x; })
+        .attr("y", function (d) {
+          var h = this.getBBox().height;
+          return d.y + h / 4;
+        });
+    });
+  </script>
+
+</body>
+
+</html>

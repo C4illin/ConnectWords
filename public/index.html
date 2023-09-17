@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Word Graph</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+</head>
+
+<body>
+  <div class="container">
+    <h1>Word Graph</h1>
+    <div class="buttons">
+      <div class="host-form">
+        <form action="/host" method="GET">
+          <button type="submit" class="button">Host Session</button>
+        </form>
+      </div>
+      <div class="join-form">
+        <form action="/join" method="GET">
+          <label for="sessionId">Session ID:</label>
+          <input type="text" id="sessionId" name="sessionId" required>
+          <button type="submit" class="button">Join Session</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>
