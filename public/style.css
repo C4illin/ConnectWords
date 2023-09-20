@@ -75,3 +75,27 @@ svg {
   display: flex;
   flex-direction: row;
 }
+
+.info-box {
+  color: white;
+  font-size: 1rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  font-weight: bold;
+}
+
+.info-div {
+  width: 1rem;
+  height: 1rem;
+  border-radius: 100%;
+  margin: 0 0.2rem;
+}
+
+.hangel {
+  background-color: #74c0fc;
+}
+
+.hangelplus {
+  background-color: #ffa8a8;
+}
