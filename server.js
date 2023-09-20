@@ -9,6 +9,7 @@ const io = socketIO(server);
 
 // Store the current session IDs
 const sessionIds = [];
+let sessionIdCache = {};
 
 app.use(cors());
 app.use("/", express.static("public"));
@@ -49,6 +50,16 @@ io.of('/host').on('connection', (socket) => {
       // Emit the 'word' event with the data to the host namespace
       io.of('/host').emit('word', data);
     });
+
+    if (!sessionId in sessionIds) {
+      sessionIds.push(sessionId);
+    }
+
+    // send cached data to host
+    if (sessionId in sessionIdCache) {
+      console.log('Sending cached data to host');
+      socket.emit('cachedData', sessionIdCache[sessionId]);
+    }
   });
 
   // Handle socket disconnections
@@ -85,6 +96,13 @@ io.of('/join').on('connection', (socket) => {
     //   console.log('Session does not exist');
     //   return;
     // }
+
+    // cache data
+    if (!(data.sessionId in sessionIdCache)) {
+      sessionIdCache[data.sessionId] = [];
+    }
+
+    sessionIdCache[data.sessionId].push(data);
 
     // emit word data to host namespace
     io.of('/' + data.sessionId).emit('word', data);

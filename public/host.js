@@ -185,9 +185,7 @@ var addTestConnection = (word1 = Math.floor(Math.random() * graph.nodes.length),
   }
 
   graph.links.push({ source: word1, target: word2, value: Math.floor(Math.random() * 2) + 1, offset: offset });
-  updateFacts();
-  simulation.links(graph.links);
-  simulation.start(200, 200, 200);
+  updateAll();
 }
 
 var nameToIndex = (name) => {
@@ -214,8 +212,13 @@ var updateFacts = () => {
   `;
 }
 
-sessionSocket.on('word', (data) => {
-  console.log(data);
+var updateAll = () => {
+  updateFacts();
+  simulation.links(graph.links);
+  simulation.start(200, 200, 200);
+}
+
+var addData = (data) => {
   var word1 = nameToIndex(data.word1);
   var word2 = nameToIndex(data.word2);
 
@@ -247,7 +250,22 @@ sessionSocket.on('word', (data) => {
   //   console.log('existing link');
   //   graph.links[linkIndex].value += data.strength;
   // }
-  updateFacts();
-  simulation.links(graph.links);
-  simulation.start(200, 200, 200);
+}
+
+
+sessionSocket.on('word', (data) => {
+  console.log(data);
+  addData(data);
+  updateAll();
+});
+
+// Handle cached data
+socket.on('cachedData', (data) => {
+  console.log('Received cached data from server');
+  console.log(data);
+
+  for (var i = 0; i < data.length; i++) {
+    addData(data[i]);
+  }
+  updateAll();
 });
