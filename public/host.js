@@ -15,8 +15,8 @@ const qrCode = new QRCode(document.getElementById('qr-code'), {
   text: window.location.href.replace('host', 'join'),
   width: 256,
   height: 256,
-  colorDark: '#000000',
-  colorLight: '#ffffff',
+  colorDark: '#ffffff',
+  colorLight: '#000000',
   correctLevel: QRCode.CorrectLevel.H
 });
 
@@ -27,7 +27,7 @@ var graph = {
     { "name": "bØf", "width": 120, "height": 40, "color": "#3D7620", "fontColor": "#000000" },
     { "name": "DNollK", "width": 120, "height": 40, "color": "#FA9907", "fontColor": "#FFFFFF" },
     { "name": "EØK", "width": 120, "height": 40, "color": "#ffff00", "fontColor": "#000000" },
-    { "name": "FnollK", "width": 120, "height": 40, "color": "#000000", "fontColor": "#FFFFFF" },
+    { "name": "FnollK", "width": 120, "height": 40, "color": "#222222", "fontColor": "#FFFFFF" },
     { "name": "GØS", "width": 120, "height": 40, "color": "#efc26a", "fontColor": "#06516b" },
     { "name": "HØK", "width": 120, "height": 40, "color": "#eb79ab", "fontColor": "#FFFFFF" },
     { "name": "INollK", "width": 120, "height": 40, "color": "#9F36A1", "fontColor": "#FFFFFF" },
@@ -36,7 +36,7 @@ var graph = {
     { "name": "MnollK", "width": 120, "height": 40, "color": "#795548", "fontColor": "#FFFFFF" },
     { "name": "NollKIT", "width": 120, "height": 40, "color": "#09cdda", "fontColor": "#FFFFFF" },
     { "name": "SJØK", "width": 120, "height": 40, "color": "#1F2163", "fontColor": "#FFFFFF" },
-    { "name": "TBK", "width": 120, "height": 40, "color": "#EEEEEE", "fontColor": "#000000" },
+    { "name": "TBK", "width": 120, "height": 40, "color": "#FFFFFF", "fontColor": "#000000" },
     { "name": "TDnollK", "width": 120, "height": 40, "color": "#8f1c43", "fontColor": "#FFFFFF" },
     { "name": "VØK", "width": 120, "height": 40, "color": "#3d85c6", "fontColor": "#FFFFFF" },
     { "name": "ZØK", "width": 120, "height": 40, "color": "#6E6E6E", "fontColor": "#FFFFFF" }
@@ -117,7 +117,7 @@ simulation.on("tick", function () {
     .data(graph.links)
     .join('path')
     .attr('stroke-width', "1.5px")
-    .attr('stroke', function (d) { return d.value > 1 ? "#000" : "#999"; })
+    .attr('stroke', function (d) { return d.value == 1 ? "#74c0fc" : "#ffa8a8"; })
     .attr('fill', 'none')
     .attr("class", "link")
     .lower().transition().duration(1000)
@@ -143,10 +143,10 @@ simulation.on("tick", function () {
         drx = 20;
         dry = 20;
       } else {
-        x1 += d.offset * 5;
-        y1 += d.offset * 5;
-        x2 += d.offset * 5;
-        y2 += d.offset * 5;
+        x1 += d.offset * 7;
+        y1 += d.offset * 7;
+        x2 += d.offset * 7;
+        y2 += d.offset * 7;
       }
 
       return "M" + x1 + "," + y1 + "A" + drx + "," + dry + " " + xRotation + "," + largeArc + "," + sweep + " " + x2 + "," + y2;
@@ -185,6 +185,7 @@ var addTestConnection = (word1 = Math.floor(Math.random() * graph.nodes.length),
   }
 
   graph.links.push({ source: word1, target: word2, value: 1, offset: offset });
+  updateFacts();
   simulation.links(graph.links);
   simulation.start(200, 200, 200);
 }
@@ -196,6 +197,21 @@ var nameToIndex = (name) => {
     }
   }
   return -1;
+}
+
+var updateFacts = () => {
+  var facts = document.getElementById('facts');
+  // add facts like: total connections. most connections number
+
+  // calculate most number of duplicates ignoring offset field
+  strongestConnection = graph.links.reduce((a, b) => a.offset > b.offset ? a : b).offset*2
+  if (strongestConnection <= 0) {
+    strongestConnection = Math.abs(strongestConnection) + 1
+  }
+
+  facts.innerHTML = `Total connections:\n<b>${graph.links.length}</b>
+  <br>Strongest connection:\n<b>${strongestConnection}</b>
+  `;
 }
 
 sessionSocket.on('word', (data) => {
@@ -231,7 +247,7 @@ sessionSocket.on('word', (data) => {
   //   console.log('existing link');
   //   graph.links[linkIndex].value += data.strength;
   // }
-
+  updateFacts();
   simulation.links(graph.links);
   simulation.start(200, 200, 200);
 });
