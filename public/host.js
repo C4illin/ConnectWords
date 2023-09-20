@@ -162,29 +162,8 @@ simulation.on("tick", function () {
 });
 
 var addTestConnection = (word1 = Math.floor(Math.random() * graph.nodes.length), word2 = Math.floor(Math.random() * graph.nodes.length)) => {
-  var data = {
-    word1: graph.nodes[word1].name,
-    word2: graph.nodes[word2].name,
-  };
-
-  var offset = 0;
-  var linkIndex = -1;
-  for (var i = graph.links.length - 1; i >= 0; i--) {
-    var link = graph.links[i];
-    if ((link.source.name == data.word1 && link.target.name == data.word2) || (link.source.name == data.word2 && link.target.name == data.word1)) {
-      linkIndex = i;
-
-      if (link.offset > 0) {
-        offset = link.offset * -1;
-      } else {
-        offset = link.offset * -1 + 1;
-      }
-
-      break;
-    }
-  }
-
-  graph.links.push({ source: word1, target: word2, value: Math.floor(Math.random() * 2) + 1, offset: offset });
+  var data = { sessionId: sessionId, word1: graph.nodes[word1].name, word2: graph.nodes[word2].name, strength: Math.floor(Math.random() * 2) + 1 }
+  addData(data);
   updateAll();
 }
 
