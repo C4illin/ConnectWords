@@ -60,13 +60,13 @@ const simulation = cola.d3adaptor(d3)
   .linkDistance(140)
   .start(200, 200, 200);
 
-  // .force("charge", d3.forceManyBody(-1000))
-  // .force("link", d3.forceLink().links(graph.links).distance(140))
-  // .force("center", d3.forceCenter(width / 2, height / 2))
-  // // .force("collide", d3.forceCollide().radius(60))
-  // // .force("x", d3.forceX(width / 2))
-  // // .force("y", d3.forceY(height / 2))
-  // .on("tick", ticked);
+// .force("charge", d3.forceManyBody(-1000))
+// .force("link", d3.forceLink().links(graph.links).distance(140))
+// .force("center", d3.forceCenter(width / 2, height / 2))
+// // .force("collide", d3.forceCollide().radius(60))
+// // .force("x", d3.forceX(width / 2))
+// // .force("y", d3.forceY(height / 2))
+// .on("tick", ticked);
 
 var outer = d3.select("#wrapper").append("svg")
   .attr("width", width)
@@ -112,19 +112,50 @@ simulation.on("tick", function () {
   node.transition().duration(1000)
     .attr('x', function (d) { return d.x - d.width / 2; })
     .attr('y', function (d) { return d.y - d.height / 2; });
-  
-  svg.selectAll("line")
+
+  svg.selectAll("path")
     .data(graph.links)
-    .join('line')
-    .attr('stroke-width', function (d) { return d.value * 2; })
-    .attr('stroke', '#999')
+    .join('path')
+    .attr('stroke-width', "1.5px")
+    .attr('stroke', function (d) { return d.value > 1 ? "#000" : "#999"; })
+    .attr('fill', 'none')
     .attr("class", "link")
     .lower().transition().duration(1000)
-    .attr('x1', function (d) { return d.source.x + d.offset * 5; })
-    .attr('y1', function (d) { return d.source.y + d.offset * 5; })
-    .attr('x2', function (d) { return d.target.x + d.offset * 5; })
-    .attr('y2', function (d) { return d.target.y + d.offset * 5; })
-  
+    .attr("d", function (d) {
+      var x1 = d.source.x;
+      var y1 = d.source.y;
+      var x2 = d.target.x;
+      var y2 = d.target.y;
+
+      // Defaults for normal edge.
+      var drx = 0;
+      var dry = 0;
+      var xRotation = 0; // degrees
+      var largeArc = 0; // 1 or 0
+      var sweep = 0; // 1 or 0
+
+      // Self edge.
+      if (x1 === x2 && y1 === y2) {
+        x1 = d.source.x + 40 + d.offset * 5;
+        y1 = d.source.y;
+        x2 = d.target.x - 40 - d.offset * 5;
+        y2 = d.target.y;
+        drx = 20;
+        dry = 20;
+      } else {
+        x1 += d.offset * 5;
+        y1 += d.offset * 5;
+        x2 += d.offset * 5;
+        y2 += d.offset * 5;
+      }
+
+      return "M" + x1 + "," + y1 + "A" + drx + "," + dry + " " + xRotation + "," + largeArc + "," + sweep + " " + x2 + "," + y2;
+    });
+  // .attr('x1', function (d) { return d.source.x + d.offset * 5; })
+  // .attr('y1', function (d) { return d.source.y + d.offset * 5; })
+  // .attr('x2', function (d) { return d.target.x + d.offset * 5; })
+  // .attr('y2', function (d) { return d.target.y + d.offset * 5; })
+
   label.transition().duration(1000)
     .attr('x', function (d) { return d.x; })
     .attr('y', function (d) { return d.y + d.height / 4; })
@@ -195,7 +226,7 @@ sessionSocket.on('word', (data) => {
 
   // if (linkIndex === -1) {
   // console.log('new link');
-  graph.links.push({ source: word1, target: word2, value: data.strength, offset: offset});
+  graph.links.push({ source: word1, target: word2, value: data.strength, offset: offset });
   // } else {
   //   console.log('existing link');
   //   graph.links[linkIndex].value += data.strength;

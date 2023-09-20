@@ -87,7 +87,7 @@ io.of('/join').on('connection', (socket) => {
     // }
 
     // emit word data to host namespace
-    io.of('/'+data.sessionId).emit('word', data);
+    io.of('/' + data.sessionId).emit('word', data);
   });
 
   // Handle new session ID data
