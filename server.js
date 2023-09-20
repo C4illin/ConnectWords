@@ -5,7 +5,7 @@ const cors = require("cors");
 
 const app = express();
 const server = http.createServer(app);
-const io = socketIO(server, { perMessageDeflate: false })
+const io = socketIO(server, { perMessageDeflate: { threshold: 1024 } })
 
 // Store the current session IDs
 const sessionIds = [];
