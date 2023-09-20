@@ -181,7 +181,7 @@ var updateFacts = () => {
   // add facts like: total connections. most connections number
 
   // calculate most number of duplicates ignoring offset field
-  strongestConnection = graph.links.reduce((a, b) => a.offset > b.offset ? a : b).offset*2
+  strongestConnection = graph.links.reduce((a, b) => a.offset > b.offset ? a : b).offset * 2
   if (strongestConnection <= 0) {
     strongestConnection = Math.abs(strongestConnection) + 1
   }
@@ -209,7 +209,7 @@ var addData = (data) => {
   // var linkIndex = -1;
   for (var i = graph.links.length - 1; i >= 0; i--) {
     var link = graph.links[i];
-    if ((link.source.name == data.word1 && link.target.name == data.word2) || (link.source.name == data.word2 && link.target.name == data.word1)) {
+    if ((link.source == word1 && link.target == word2) || (link.source == word2 && link.target == word1) || (link.source.index == word1 && link.target.index == word2) || (link.source.index == word2 && link.target.index == word1)) {
       // linkIndex = i;
 
       if (link.offset > 0) {
@@ -221,10 +221,10 @@ var addData = (data) => {
       break;
     }
   }
+  graph.links.push({ source: word1, target: word2, value: data.strength, offset: offset });
 
   // if (linkIndex === -1) {
   // console.log('new link');
-  graph.links.push({ source: word1, target: word2, value: data.strength, offset: offset });
   // } else {
   //   console.log('existing link');
   //   graph.links[linkIndex].value += data.strength;
@@ -243,8 +243,10 @@ socket.on('cachedData', (data) => {
   console.log('Received cached data from server');
   console.log(data);
 
-  for (var i = 0; i < data.length; i++) {
-    addData(data[i]);
+  for (link of data) {
+    addData(link);
   }
+
   updateAll();
+  console.log('Cached data added to graph');
 });
