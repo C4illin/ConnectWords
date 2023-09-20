@@ -116,7 +116,7 @@ simulation.on("tick", function () {
   svg.selectAll("path")
     .data(graph.links)
     .join('path')
-    .attr('stroke-width', "1.5px")
+    .attr('stroke-width', function (d) { return d.value == 1 ? "1.5px" : "2.5px"; })
     .attr('stroke', function (d) { return d.value == 1 ? "#74c0fc" : "#ffa8a8"; })
     .attr('fill', 'none')
     .attr("class", "link")
@@ -184,7 +184,7 @@ var addTestConnection = (word1 = Math.floor(Math.random() * graph.nodes.length),
     }
   }
 
-  graph.links.push({ source: word1, target: word2, value: 1, offset: offset });
+  graph.links.push({ source: word1, target: word2, value: Math.floor(Math.random() * 2) + 1, offset: offset });
   updateFacts();
   simulation.links(graph.links);
   simulation.start(200, 200, 200);
