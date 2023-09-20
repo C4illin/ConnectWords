@@ -57,7 +57,7 @@ const simulation = cola.d3adaptor(d3)
   .nodes(graph.nodes)
   .links(graph.links)
   .avoidOverlaps(true)
-  .linkDistance(140)
+  .jaccardLinkLengths(140)
   .start(200, 200, 200);
 
 // .force("charge", d3.forceManyBody(-1000))
