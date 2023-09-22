@@ -22,24 +22,24 @@ const qrCode = new QRCode(document.getElementById('qr-code'), {
 
 var graph = {
   nodes: [
-    { "name": "ÆØK", "width": 120, "height": 40, "color": "#54ce59", "fontColor": "#FFFFFF" },
-    { "name": "AØK", "width": 120, "height": 40, "color": "#cc0000", "fontColor": "#FFFFFF" },
-    { "name": "bØf", "width": 120, "height": 40, "color": "#3D7620", "fontColor": "#000000" },
-    { "name": "DNollK", "width": 120, "height": 40, "color": "#FA9907", "fontColor": "#FFFFFF" },
-    { "name": "EØK", "width": 120, "height": 40, "color": "#ffff00", "fontColor": "#000000" },
-    { "name": "FnollK", "width": 120, "height": 40, "color": "#222222", "fontColor": "#FFFFFF" },
-    { "name": "GØS", "width": 120, "height": 40, "color": "#efc26a", "fontColor": "#06516b" },
-    { "name": "HØK", "width": 120, "height": 40, "color": "#eb79ab", "fontColor": "#FFFFFF" },
-    { "name": "INollK", "width": 120, "height": 40, "color": "#9F36A1", "fontColor": "#FFFFFF" },
-    { "name": "KØK", "width": 120, "height": 40, "color": "#5c9143", "fontColor": "#FFFFFF" },
-    { "name": "MK", "width": 120, "height": 40, "color": "#034069", "fontColor": "#FFFFFF" },
-    { "name": "MnollK", "width": 120, "height": 40, "color": "#795548", "fontColor": "#FFFFFF" },
-    { "name": "NollKIT", "width": 120, "height": 40, "color": "#09cdda", "fontColor": "#FFFFFF" },
-    { "name": "SJØK", "width": 120, "height": 40, "color": "#1F2163", "fontColor": "#FFFFFF" },
-    { "name": "TBK", "width": 120, "height": 40, "color": "#FFFFFF", "fontColor": "#000000" },
-    { "name": "TDnollK", "width": 120, "height": 40, "color": "#8f1c43", "fontColor": "#FFFFFF" },
-    { "name": "VØK", "width": 120, "height": 40, "color": "#3d85c6", "fontColor": "#FFFFFF" },
-    { "name": "ZØK", "width": 120, "height": 40, "color": "#6E6E6E", "fontColor": "#FFFFFF" }
+    { "name": "ÆØK", "width": 80, "height": 30, "color": "#54ce59", "fontColor": "#FFFFFF" },
+    { "name": "AØK", "width": 80, "height": 30, "color": "#cc0000", "fontColor": "#FFFFFF" },
+    { "name": "bØf", "width": 80, "height": 30, "color": "#3D7620", "fontColor": "#000000" },
+    { "name": "DNollK", "width": 80, "height": 30, "color": "#FA9907", "fontColor": "#FFFFFF" },
+    { "name": "EØK", "width": 80, "height": 30, "color": "#ffff00", "fontColor": "#000000" },
+    { "name": "FnollK", "width": 80, "height": 30, "color": "#222222", "fontColor": "#FFFFFF" },
+    { "name": "GØS", "width": 80, "height": 30, "color": "#efc26a", "fontColor": "#06516b" },
+    { "name": "HØK", "width": 80, "height": 30, "color": "#eb79ab", "fontColor": "#FFFFFF" },
+    { "name": "INollK", "width": 80, "height": 30, "color": "#9F36A1", "fontColor": "#FFFFFF" },
+    { "name": "KØK", "width": 80, "height": 30, "color": "#5c9143", "fontColor": "#FFFFFF" },
+    { "name": "MK", "width": 80, "height": 30, "color": "#034069", "fontColor": "#FFFFFF" },
+    { "name": "MnollK", "width": 80, "height": 30, "color": "#795548", "fontColor": "#FFFFFF" },
+    { "name": "NollKIT", "width": 80, "height": 30, "color": "#09cdda", "fontColor": "#FFFFFF" },
+    { "name": "SJØK", "width": 80, "height": 30, "color": "#1F2163", "fontColor": "#FFFFFF" },
+    { "name": "TBK", "width": 80, "height": 30, "color": "#FFFFFF", "fontColor": "#000000" },
+    { "name": "TDnollK", "width": 80, "height": 30, "color": "#8f1c43", "fontColor": "#FFFFFF" },
+    { "name": "VØK", "width": 80, "height": 30, "color": "#3d85c6", "fontColor": "#FFFFFF" },
+    { "name": "ZØK", "width": 80, "height": 30, "color": "#6E6E6E", "fontColor": "#FFFFFF" }
   ],
   links: [
   ]
@@ -136,12 +136,12 @@ simulation.on("tick", function () {
 
       // Self edge.
       if (x1 === x2 && y1 === y2) {
-        x1 = d.source.x + 40 + d.offset * 5;
+        x1 = d.source.x + 20 + d.offset * 3;
         y1 = d.source.y;
-        x2 = d.target.x - 40 - d.offset * 5;
+        x2 = d.target.x - 20 - d.offset * 3;
         y2 = d.target.y;
-        drx = 20;
-        dry = 20;
+        drx = 10;
+        dry = 10;
       } else {
         x1 += d.offset * 7;
         y1 += d.offset * 7;
