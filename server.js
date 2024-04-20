@@ -5,7 +5,7 @@ const cors = require("cors");
 
 const app = express();
 const server = http.createServer(app);
-const io = socketIO(server);
+const io = socketIO(server, { perMessageDeflate: { threshold: 1024 } })
 
 // Store the current session IDs
 const sessionIds = [];
@@ -60,6 +60,17 @@ io.of('/host').on('connection', (socket) => {
       console.log('Sending cached data to host');
       socket.emit('cachedData', sessionIdCache[sessionId]);
     }
+
+    // Delete cached data after 24 hours
+    setTimeout(() => {
+      if (sessionId in sessionIdCache) {
+        sessionIdCache[sessionId] = [];
+      }
+
+      if (sessionIds.includes(sessionId)) {
+        sessionIds.splice(sessionIds.indexOf(sessionId), 1);
+      }
+    }, 24 * 60 * 60 * 1000);
   });
 
   // Handle socket disconnections
