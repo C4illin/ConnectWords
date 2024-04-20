@@ -6,7 +6,7 @@ const sessionId = window.location.pathname.split("/")[2];
 // // Send the session ID to the server
 socket.emit("sessionId", sessionId);
 
-const sessionSocket = io("/" + sessionId);
+const sessionSocket = io(`/${sessionId}`);
 
 document.getElementById("session-id").innerText = sessionId;
 
@@ -20,7 +20,7 @@ const qrCode = new QRCode(document.getElementById("qr-code"), {
 	correctLevel: QRCode.CorrectLevel.H,
 });
 
-var graph = {
+const graph = {
 	nodes: [
 		{
 			name: "ÆØK",
@@ -152,10 +152,10 @@ var graph = {
 	links: [],
 };
 
-var width = window.innerWidth,
-	height = window.innerHeight;
+const width = window.innerWidth;
+const height = window.innerHeight;
 
-// var cola = cola.d3adaptor(d3)
+// let cola = cola.d3adaptor(d3)
 //   .linkDistance(140)
 //   .size([width, height]);
 
@@ -176,17 +176,17 @@ const simulation = cola
 // // .force("y", d3.forceY(height / 2))
 // .on("tick", ticked);
 
-var outer = d3
+const outer = d3
 	.select("#wrapper")
 	.append("svg")
 	.attr("width", width)
 	.attr("height", height);
 
-var svg = outer.append("g");
+const svg = outer.append("g");
 
 // .append("g")
-// var pageBounds = { x: Number(window.innerWidth*0.3), y: 10, width: Number(width), height: Number(height) }
-// var realGraphNodes = graph.nodes.slice(0),
+// let pageBounds = { x: Number(window.innerWidth*0.3), y: 10, width: Number(width), height: Number(height) }
+// let realGraphNodes = graph.nodes.slice(0),
 //   fixedNode = { fixed: true, fixedWeight: 100 },
 //   topLeft = { ...fixedNode, x: 10, y: 10 },
 //   tlIndex = graph.nodes.push(topLeft) - 1,
@@ -194,7 +194,7 @@ var svg = outer.append("g");
 //   brIndex = graph.nodes.push(bottomRight) - 1,
 //   constraints = [];
 
-// for (var i = 0; i < realGraphNodes.length; i++) {
+// for (let i = 0; i < realGraphNodes.length; i++) {
 //   constraints.push({ axis: 'x', type: 'separation', left: tlIndex, right: i, gap: 100 });
 //   constraints.push({ axis: 'y', type: 'separation', left: tlIndex, right: i, gap: 100 });
 //   constraints.push({ axis: 'x', type: 'separation', left: i, right: brIndex, gap: 100 });
@@ -214,7 +214,7 @@ const node = svg
 	.style("fill", (d) => d.color)
 	.attr("class", "node");
 
-var label = svg
+const label = svg
 	.selectAll("text")
 	.data(graph.nodes)
 	.enter()
@@ -234,25 +234,25 @@ simulation.on("tick", () => {
 		.selectAll("path")
 		.data(graph.links)
 		.join("path")
-		.attr("stroke-width", (d) => (d.value == 1 ? "1.5px" : "2.5px"))
-		.attr("stroke", (d) => (d.value == 1 ? "#74c0fc" : "#ffa8a8"))
+		.attr("stroke-width", (d) => (d.value === 1 ? "1.5px" : "2.5px"))
+		.attr("stroke", (d) => (d.value === 1 ? "#74c0fc" : "#ffa8a8"))
 		.attr("fill", "none")
 		.attr("class", "link")
 		.lower()
 		.transition()
 		.duration(1000)
 		.attr("d", (d) => {
-			var x1 = d.source.x;
-			var y1 = d.source.y;
-			var x2 = d.target.x;
-			var y2 = d.target.y;
+			let x1 = d.source.x;
+			let y1 = d.source.y;
+			let x2 = d.target.x;
+			let y2 = d.target.y;
 
 			// Defaults for normal edge.
-			var drx = 0;
-			var dry = 0;
-			var xRotation = 0; // degrees
-			var largeArc = 0; // 1 or 0
-			var sweep = 0; // 1 or 0
+			let drx = 0;
+			let dry = 0;
+			const xRotation = 0; // degrees
+			const largeArc = 0; // 1 or 0
+			const sweep = 0; // 1 or 0
 
 			// Self edge.
 			if (x1 === x2 && y1 === y2) {
@@ -269,26 +269,7 @@ simulation.on("tick", () => {
 				y2 += d.offset * 7;
 			}
 
-			return (
-				"M" +
-				x1 +
-				"," +
-				y1 +
-				"A" +
-				drx +
-				"," +
-				dry +
-				" " +
-				xRotation +
-				"," +
-				largeArc +
-				"," +
-				sweep +
-				" " +
-				x2 +
-				"," +
-				y2
-			);
+			return `M${x1},${y1}A${drx},${dry} ${xRotation},${largeArc},${sweep} ${x2},${y2}`;
 		});
 	// .attr('x1', function (d) { return d.source.x + d.offset * 5; })
 	// .attr('y1', function (d) { return d.source.y + d.offset * 5; })
@@ -302,12 +283,11 @@ simulation.on("tick", () => {
 		.attr("y", (d) => d.y + d.height / 4);
 });
 
-var addTestConnection = (
+const addTestConnection = (
 	word1 = Math.floor(Math.random() * graph.nodes.length),
 	word2 = Math.floor(Math.random() * graph.nodes.length),
 ) => {
-	var data = {
-		sessionId: sessionId,
+	const data = {
 		word1: graph.nodes[word1].name,
 		word2: graph.nodes[word2].name,
 		strength: Math.floor(Math.random() * 2) + 1,
@@ -316,8 +296,8 @@ var addTestConnection = (
 	updateAll();
 };
 
-var nameToIndex = (name) => {
-	for (var i = 0; i < graph.nodes.length; i++) {
+const nameToIndex = (name) => {
+	for (let i = 0; i < graph.nodes.length; i++) {
 		if (graph.nodes[i].name === name) {
 			return i;
 		}
@@ -325,8 +305,8 @@ var nameToIndex = (name) => {
 	return -1;
 };
 
-var updateFacts = () => {
-	var facts = document.getElementById("facts");
+const updateFacts = () => {
+	const facts = document.getElementById("facts");
 	// add facts like: total connections. most connections number
 
 	// calculate most number of duplicates ignoring offset field
@@ -341,29 +321,29 @@ var updateFacts = () => {
   `;
 };
 
-var updateAll = () => {
+const updateAll = () => {
 	updateFacts();
 	simulation.links(graph.links);
 	simulation.start(200, 200, 200);
 };
 
-var addData = (data) => {
-	var word1 = nameToIndex(data.word1);
-	var word2 = nameToIndex(data.word2);
+const addData = (data) => {
+	const word1 = nameToIndex(data.word1);
+	const word2 = nameToIndex(data.word2);
 
 	if (word1 === -1 || word2 === -1) {
 		return;
 	}
 
-	var offset = 0;
-	// var linkIndex = -1;
-	for (var i = graph.links.length - 1; i >= 0; i--) {
-		var link = graph.links[i];
+	let offset = 0;
+	// let linkIndex = -1;
+	for (let i = graph.links.length - 1; i >= 0; i--) {
+		const link = graph.links[i];
 		if (
-			(link.source == word1 && link.target == word2) ||
-			(link.source == word2 && link.target == word1) ||
-			(link.source.index == word1 && link.target.index == word2) ||
-			(link.source.index == word2 && link.target.index == word1)
+			(link.source === word1 && link.target === word2) ||
+			(link.source === word2 && link.target === word1) ||
+			(link.source.index === word1 && link.target.index === word2) ||
+			(link.source.index === word2 && link.target.index === word1)
 		) {
 			// linkIndex = i;
 
