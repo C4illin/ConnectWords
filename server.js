@@ -62,6 +62,9 @@ io.of("/host").on("connection", (socket) => {
 		// Get the namespace with the same name as the session ID
 		const sessionNamespace = io.of(`/${sessionId}`);
 
+		// allow 500 listeners
+		sessionNamespace.setMaxListeners(500);
+
 		// Listen for the 'word' event on the session namespace
 		sessionNamespace.on("word", (data) => {
 			console.log(data);
