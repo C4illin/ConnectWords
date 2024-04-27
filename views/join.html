@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Connect Words</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+</head>
+
+<body>
+  <main class="container">
+    <h1>Add Connection</h1>
+    <div class="word-form">
+      <form>
+        <label for="word1">Word 1:</label>
+        <select id="word1" name="word1" required>
+        </select>
+        <label for="word2">Word 2:</label>
+        <select list="nollk" id="word2" name="word2" required>
+        </select>
+
+        <label for="strength">Connection strength:</label>
+        <select id="strength" name="strength">
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+        </select>
+        <button type="submit" class="button">Add Connection</button>
+      </form>
+    </div>
+  </main>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/join.js"></script>
+</body>
+
+</html>

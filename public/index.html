@@ -4,28 +4,35 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Smittspårning</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+  <title>Connect Words</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+  <script src="index.js" defer></script>
 </head>
 
 <body>
-  <div class="container">
-    <h1>Smittspårning</h1>
+  <main class="container">
+    <h1>Connect Words</h1>
+    <h3>Join Session</h3>
+    <div class="join-form">
+      <form action="/join" method="GET">
+        <fieldset role="group">
+          <!-- <label for="sessionId">Session ID:</label> -->
+          <input type="text" id="sessionId" name="sessionId" required placeholder="Session ID">
+          <input type="submit" class="button" value="Join Session">
+        </fieldset>
+      </form>
+    </div>
+    <h3>Host Session</h3>
     <div class="buttons">
       <div class="host-form">
         <form action="/host" method="GET">
+          <label for="words">Words:</label>
+          <textarea name="words" id="words" placeholder='Words to connect (separate them with enter)' style="height: 300px;"></textarea>
           <button type="submit" class="button">Host Session</button>
         </form>
       </div>
-      <div class="join-form">
-        <form action="/join" method="GET">
-          <label for="sessionId">Session ID:</label>
-          <input type="text" id="sessionId" name="sessionId" required>
-          <button type="submit" class="button">Join Session</button>
-        </form>
-      </div>
     </div>
-  </div>
+  </main>
 </body>
 
 </html>
