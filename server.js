@@ -27,19 +27,31 @@ app.get("/host", (req, res) => {
 			.padStart(4, "0");
 	}
 
-	if (!(sessionId in sessionIdCache)) {
-		sessionIdCache[sessionId] = {};
-	}
+	sessionIdCache[sessionId] = {};
 
-	const words = req.query.words.replaceAll("\r", "").split("\n");
-	sessionIdCache[sessionId].words = words;
+	// store words, colors, and textColors in cache
+	const words = req.query.words;
+	const colors = req.query.colors;
+	const textColors = req.query.textColors;
+
+	const filteredData = words
+		.map((word, index) => {
+			return { word, color: colors[index], textColor: textColors[index] };
+		})
+		.filter((item) => item.word !== "");
+
+	sessionIdCache[sessionId].words = filteredData.map((item) => item.word);
+	sessionIdCache[sessionId].colors = filteredData.map((item) => item.color);
+	sessionIdCache[sessionId].textColors = filteredData.map(
+		(item) => item.textColor,
+	);
+
 	sessionIds.push(sessionId);
 	res.redirect(`/host/${sessionId}`);
 });
 
 // Serve the HTML file and static assets for hosting sessions
 app.get("/host/:sessionId", (req, res) => {
-	// res.render("host.ejs", { words: sessionIdCache[req.params.sessionId].words });
 	res.sendFile(`${__dirname}/views/host.html`);
 });
 
@@ -83,6 +95,8 @@ io.of("/host").on("connection", (socket) => {
 			socket.emit("cachedData", {
 				cache: sessionIdCache[sessionId].connections,
 				words: sessionIdCache[sessionId].words,
+				colors: sessionIdCache[sessionId].colors,
+				textColors: sessionIdCache[sessionId].textColors,
 			});
 
 			// console.log("Sending word data to host");

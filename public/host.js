@@ -171,18 +171,18 @@ const drawGraph = () => {
 			.attr("y", (d) => d.y + d.height / 4);
 	});
 
-	const addTestConnection = (
-		word1 = Math.floor(Math.random() * graph.nodes.length),
-		word2 = Math.floor(Math.random() * graph.nodes.length),
-	) => {
-		const data = {
-			word1: graph.nodes[word1].name,
-			word2: graph.nodes[word2].name,
-			strength: Math.floor(Math.random() * 2) + 1,
-		};
-		addData(data);
-		updateAll();
-	};
+	// const addTestConnection = (
+	// 	word1 = Math.floor(Math.random() * graph.nodes.length),
+	// 	word2 = Math.floor(Math.random() * graph.nodes.length),
+	// ) => {
+	// 	const data = {
+	// 		word1: graph.nodes[word1].name,
+	// 		word2: graph.nodes[word2].name,
+	// 		strength: Math.floor(Math.random() * 2) + 1,
+	// 	};
+	// 	addData(data);
+	// 	updateAll();
+	// };
 
 	const updateFacts = () => {
 		const facts = document.getElementById("facts");
@@ -273,22 +273,34 @@ const addData = (data) => {
 	// }
 };
 
+const getTextWidth = (text) => {
+	const canvas = document.createElement("canvas");
+	const context = canvas.getContext("2d");
+	context.font = "20px sans-serif";
+	const metrics = context.measureText(text);
+	return metrics.width;
+};
+
 // Handle cached data
 socket.on("cachedData", (data) => {
 	console.log("Received cached data from server");
 
 	const words = data?.words;
+	const colors = data?.colors;
+	const textColors = data?.textColors;
 	const connections = data?.cache;
 
 	console.log(words);
 
-	for (const word of words) {
+	for (let i = 0; i < words.length; i++) {
+		const calculatedWidth = Math.max(getTextWidth(words[i]) + 10, nodeWidth);
+
 		graph.nodes.push({
-			name: word,
-			width: nodeWidth,
+			name: words[i],
+			width: calculatedWidth,
 			height: nodeHeight,
-			color: "#FFFFFF",
-			fontColor: "#000000",
+			color: colors[i],
+			fontColor: textColors[i],
 		});
 	}
 

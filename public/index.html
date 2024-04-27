@@ -10,10 +10,21 @@
 </head>
 
 <body>
+  <header class="container">
+    <nav>
+      <ul>
+        <li>
+          <h1>Connect Words</h1>
+        </li>
+      </ul>
+      <ul>
+        <li><a href="https://github.com/C4illin/ConnectWords" class="secondary">Source Code</a></li>
+      </ul>
+    </nav>
+  </header>
   <main class="container">
-    <h1>Connect Words</h1>
-    <h3>Join Session</h3>
-    <div class="join-form">
+    <section>
+      <h3>Join Session</h3>
       <form action="/join" method="GET">
         <fieldset role="group">
           <!-- <label for="sessionId">Session ID:</label> -->
@@ -21,18 +32,44 @@
           <input type="submit" class="button" value="Join Session">
         </fieldset>
       </form>
-    </div>
-    <h3>Host Session</h3>
-    <div class="buttons">
-      <div class="host-form">
-        <form action="/host" method="GET">
-          <label for="words">Words:</label>
-          <textarea name="words" id="words" placeholder='Words to connect (separate them with enter)' style="height: 300px;"></textarea>
+    </section>
+    <section>
+      <h3>Host Session</h3>
+      <form action="/host" method="GET">
+        <!-- <label for="words">Words:</label> -->
+        <table id="wordsTable">
+          <tr>
+            <th>Word</th>
+            <th>Color</th>
+            <th>Text</th>
+          </tr>
+          <tr>
+            <td><input type="text" name="words[]" placeholder="Word"></td>
+            <td><input type="color" name="colors[]" value="#1f77b4"></td>
+            <td><input type="color" name="textColors[]" value="#000000"></td>
+          </tr>
+        </table>
+        
+        <!-- <table id="connectionsTable">
+          <tr>
+            <th>Connection</th>
+            <th>Color</th>
+          </tr>
+          <tr>
+            <td><input type="text" name="words[]" placeholder="Word"></td>
+            <td><input type="color" name="colors[]" value="#1f77b4"></td>
+          </tr>
+        </table> -->
+        <div role="group">
+          <button type="button" id="addWordButton" class="secondary">Add word</button>
           <button type="submit" class="button">Host Session</button>
-        </form>
-      </div>
-    </div>
+        </div>
+      </form>
+    </section>
   </main>
+  <!-- <footer class="container">
+    <p>Created by <a href="https://github.com/C4illin">Emrik Östling</a></p>
+  </footer> -->
 </body>
 
 </html>
