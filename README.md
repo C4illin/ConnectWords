@@ -44,3 +44,11 @@ You probably want to add a reverse proxy in front of it.
 2. Install dependencies with `bun install` or `npm install`
 3. Start the server with `bun .` or `node .`
 4. Visit your local ip on port 3000
+
+## Development
+
+1. Clone the repo
+2. Install dependencies with `bun install` or `npm install`
+3. Start the server with `bun --watch .`
+
+All pull requests are welcome!
