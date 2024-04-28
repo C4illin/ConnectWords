@@ -17,6 +17,7 @@ Features:
 3. Write the connections you want. If unsure just test with only the default one
 4. Join from mobile phones by scanning the QR-code
 5. Play!
+6. If you don't see the game updating, refresh the page
 
 ## Self host
 
