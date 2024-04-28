@@ -3,10 +3,12 @@
 An interactive word connection game made with cola.js, d3.js and websockets.
 
 Features:
-* Choose words and colors
-* Choose connection names and colors
-* Supports multiple hosts and clients
-* Tested with 100+ clients
+
+- Choose words and colors
+- Choose connection names and colors
+- Supports multiple hosts and clients
+- Tested with 100+ clients
+- All responses are cached in memory for 24 hours
 
 ## How to play
 
@@ -18,16 +20,27 @@ Features:
 
 ## Self host
 
+```bash
+docker run -d -p 3000:3000 ghcr.io/c4illin/connectwords:main
+```
+
 ```yaml
 # docker-compose.yml
 
 services:
   connectwords:
     image: ghcr.io/c4illin/connectwords:main
-    restart: unless-stopped
     ports:
       - 3000:3000
-
+    environment:
+      - CACHE_HOURS=24 # Optional, default 24
 ```
 
-You can also download the source code and run the `server.js` file after installing everything with npm/bun install. But docker is probably easier.
+You probably want to add a reverse proxy in front of it.
+
+### Not docker
+
+1. Clone the repo
+2. Install dependencies with `bun install` or `npm install`
+3. Start the server with `bun .` or `node .`
+4. Visit your local ip on port 3000

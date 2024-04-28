@@ -6,6 +6,7 @@ const cors = require("cors");
 const app = express();
 const server = http.createServer(app);
 const io = socketIO(server, { perMessageDeflate: { threshold: 1024 } });
+const cacheHours = process.env.CACHE_HOURS || 24;
 
 // Store the current session IDs
 const sessionIds = [];
@@ -119,7 +120,7 @@ io.of("/host").on("connection", (socket) => {
 					sessionIds.splice(sessionIds.indexOf(sessionId), 1);
 				}
 			},
-			24 * 60 * 60 * 1000,
+			CACHE_HOURS * 60 * 60 * 1000,
 		);
 	});
 
