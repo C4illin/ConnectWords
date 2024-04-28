@@ -20,11 +20,11 @@ app.get("/host", (req, res) => {
 	// e.g. 0001, 0002, 0003, etc.
 	let sessionId = Math.floor(Math.random() * 10000)
 		.toString()
-		.padStart(4, "0");
+		.padStart(6, "0");
 	while (sessionIds.includes(sessionId)) {
 		sessionId = Math.floor(Math.random() * 10000)
 			.toString()
-			.padStart(4, "0");
+			.padStart(6, "0");
 	}
 
 	sessionIdCache[sessionId] = {};
@@ -45,6 +45,9 @@ app.get("/host", (req, res) => {
 	sessionIdCache[sessionId].textColors = filteredData.map(
 		(item) => item.textColor,
 	);
+
+	sessionIdCache[sessionId].connectionNames = req.query.connectionNames;
+	sessionIdCache[sessionId].connectionColors = req.query.connectionColors;
 
 	sessionIds.push(sessionId);
 	res.redirect(`/host/${sessionId}`);
@@ -93,10 +96,12 @@ io.of("/host").on("connection", (socket) => {
 		if (sessionId in sessionIdCache) {
 			console.log("Sending cached data to host");
 			socket.emit("cachedData", {
-				cache: sessionIdCache[sessionId].connections,
+				connections: sessionIdCache[sessionId].connections,
 				words: sessionIdCache[sessionId].words,
 				colors: sessionIdCache[sessionId].colors,
 				textColors: sessionIdCache[sessionId].textColors,
+				connectionNames: sessionIdCache[sessionId].connectionNames,
+				connectionColors: sessionIdCache[sessionId].connectionColors,
 			});
 
 			// console.log("Sending word data to host");
@@ -124,11 +129,14 @@ io.of("/host").on("connection", (socket) => {
 	});
 });
 
-app.get("/words/:sessionId.json", (req, res) => {
+app.get("/data/:sessionId.json", (req, res) => {
 	const { sessionId } = req.params;
 
 	if (sessionId in sessionIdCache) {
-		res.json({ words: sessionIdCache[sessionId].words });
+		res.json({ 
+			words: sessionIdCache[sessionId].words,
+			connectionNames: sessionIdCache[sessionId].connectionNames,
+		 });
 	} else {
 		res.json({ words: [] });
 	}

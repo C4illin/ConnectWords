@@ -21,7 +21,7 @@ form.addEventListener("submit", (event) => {
 });
 
 // Fetch the data from a server or local file
-fetch(`/words/${sessionId}.json`)
+fetch(`/data/${sessionId}.json`)
 	.then((response) => response.json())
 	.then((data) => {
 		// Get the select elements
@@ -39,5 +39,13 @@ fetch(`/words/${sessionId}.json`)
 			option2.value = word;
 			option2.text = word;
 			word2Select.add(option2);
+		}
+
+		const strengthSelect = document.getElementById("strength");
+		for (let i = 0; i < data.connectionNames.length; i++) {
+			const option = document.createElement("option");
+			option.value = i+1;
+			option.text = data.connectionNames[i];
+			strengthSelect.add(option);
 		}
 	});

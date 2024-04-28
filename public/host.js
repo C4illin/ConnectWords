@@ -108,22 +108,7 @@ const drawGraph = () => {
 			.data(graph.links)
 			.join("path")
 			.attr("stroke-width", "2px")
-			.attr("stroke", (d) => {
-				switch (d.value) {
-					case 1:
-						return "#3C71F7";
-					case 2:
-						return "#398712";
-					case 3:
-						return "#F2DF0D";
-					case 4:
-						return "#FF9500";
-					case 5:
-						return "#D93526";
-					default:
-						return "#3C71F7";
-				}
-			})
+			.attr("stroke", (d) => { return connectionNumToColor(d.value); })
 			.attr("fill", "none")
 			.attr("class", "link")
 			.lower()
@@ -273,6 +258,12 @@ const addData = (data) => {
 	// }
 };
 
+let connectionColors;
+
+const connectionNumToColor = (num) => {
+	return connectionColors[num % (connectionColors.length + 1) - 1];
+};
+
 const getTextWidth = (text) => {
 	const canvas = document.createElement("canvas");
 	const context = canvas.getContext("2d");
@@ -288,7 +279,9 @@ socket.on("cachedData", (data) => {
 	const words = data?.words;
 	const colors = data?.colors;
 	const textColors = data?.textColors;
-	const connections = data?.cache;
+	const connections = data?.connections;
+	const connectionNames = data?.connectionNames;
+	connectionColors = data?.connectionColors;
 
 	console.log(words);
 
@@ -302,6 +295,22 @@ socket.on("cachedData", (data) => {
 			color: colors[i],
 			fontColor: textColors[i],
 		});
+	}
+
+	const connectionNamesElement = document.getElementById("connectionNames");
+
+	for (let i = 0; i < connectionNames.length; i++) {
+		const infoBox = document.createElement("div");
+		infoBox.className = "info-box";
+		infoBox.innerHTML = `
+        ${connectionNames[i]}: <div class="info-div" style="background-color: ${connectionColors[i]};"></div>
+    `;
+		connectionNamesElement.appendChild(infoBox);
+
+		// Add a break after each info-box except the last one
+		if (i < connectionNames.length - 1) {
+			connectionNamesElement.appendChild(document.createElement("br"));
+		}
 	}
 
 	if (connections) {

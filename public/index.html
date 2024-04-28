@@ -7,6 +7,11 @@
   <title>Connect Words</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
   <script src="index.js" defer></script>
+  <style>
+    td:has(> button[type="button"]) {
+      width: 0;
+    }
+  </style>
 </head>
 
 <body>
@@ -14,11 +19,11 @@
     <nav>
       <ul>
         <li>
-          <h1>Connect Words</h1>
+          <a href="/"><h1 style="margin: 0;">Connect Words</h1></a>
         </li>
       </ul>
       <ul>
-        <li><a href="https://github.com/C4illin/ConnectWords" class="secondary">Source Code</a></li>
+        <li><a href="https://github.com/C4illin/ConnectWords" class="secondary">About</a></li>
       </ul>
     </nav>
   </header>
@@ -42,26 +47,30 @@
             <th>Word</th>
             <th>Color</th>
             <th>Text</th>
+            <th></th>
           </tr>
           <tr>
             <td><input type="text" name="words[]" placeholder="Word"></td>
             <td><input type="color" name="colors[]" value="#1f77b4"></td>
             <td><input type="color" name="textColors[]" value="#000000"></td>
+            <td><button type="button" class="secondary" onclick="removeRow(this)">X</button></td>
           </tr>
         </table>
-        
-        <!-- <table id="connectionsTable">
+        <button type="button" id="addWordButton" class="secondary">Add word</button>
+        <table id="connectionsTable">
           <tr>
             <th>Connection</th>
             <th>Color</th>
           </tr>
           <tr>
-            <td><input type="text" name="words[]" placeholder="Word"></td>
-            <td><input type="color" name="colors[]" value="#1f77b4"></td>
+            <td><input type="text" name="connectionNames[]" placeholder="Word" value="1"></td>
+            <td><input type="color" name="connectionColors[]" value="#1f77b4"></td>
+            <td><button type="button" class="secondary" onclick="removeRow(this)">X</button></td>
           </tr>
-        </table> -->
+        </table>
+        <button type="button" id="addConnectionButton" class="secondary">Add connection</button>
         <div role="group">
-          <button type="button" id="addWordButton" class="secondary">Add word</button>
+          
           <button type="submit" class="button">Host Session</button>
         </div>
       </form>
