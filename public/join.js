@@ -1,6 +1,6 @@
 const socket = io("/join");
 const sessionId = window.location.pathname.split("/").pop();
-const form = document.querySelector(".word-form form");
+const form = document.querySelector("form");
 const word1Input = document.getElementById("word1");
 const word2Input = document.getElementById("word2");
 const strengthInput = document.getElementById("strength");

@@ -19,11 +19,11 @@ app.get("/host", (req, res) => {
 	// generate session id and send to /host/:sessionId
 	// sessionID is four numbers as string with leading zeros
 	// e.g. 0001, 0002, 0003, etc.
-	let sessionId = Math.floor(Math.random() * 10000)
+	let sessionId = Math.floor(Math.random() * 1000000)
 		.toString()
 		.padStart(6, "0");
 	while (sessionIds.includes(sessionId)) {
-		sessionId = Math.floor(Math.random() * 10000)
+		sessionId = Math.floor(Math.random() * 1000000)
 			.toString()
 			.padStart(6, "0");
 	}
@@ -120,7 +120,7 @@ io.of("/host").on("connection", (socket) => {
 					sessionIds.splice(sessionIds.indexOf(sessionId), 1);
 				}
 			},
-			CACHE_HOURS * 60 * 60 * 1000,
+			cacheHours * 60 * 60 * 1000,
 		);
 	});
 
