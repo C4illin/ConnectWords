@@ -2,7 +2,9 @@
 
 An interactive word connection game made with cola.js, d3.js and websockets.
 
-Features:
+![demo image](image.png)
+
+## Features:
 
 - Choose words and colors
 - Choose connection names and colors
